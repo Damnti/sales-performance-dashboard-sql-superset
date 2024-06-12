@@ -22,7 +22,7 @@ INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
 GROUP BY s.sales_person_id, emp.first_name, emp.last_name -- выполняем группировку
 HAVING AVG(s.quantity * p.price) < (select AVG(s.quantity * p.price) 
-									FROM sales s
-									INNER JOIN products p ON
-									s.product_id = p.product_id)
+				    FROM sales s
+				    INNER JOIN products p ON
+				    s.product_id = p.product_id)
 ORDER BY 2; -- сортируем по третьему столбцу в порядке убывания
