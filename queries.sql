@@ -25,4 +25,4 @@ HAVING AVG(s.quantity * p.price) < (select AVG(s.quantity * p.price)
 				    FROM sales s
 				    INNER JOIN products p ON
 				    s.product_id = p.product_id)
-ORDER BY 2; -- сортируем по третьему столбцу в порядке убывания
+ORDER BY 2; -- сортируем по третьему столбцу в порядке возрастания
