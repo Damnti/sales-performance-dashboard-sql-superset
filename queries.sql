@@ -24,7 +24,7 @@ ORDER BY 3 DESC; -- сортируем по третьему столбцу в �
 SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS seller, -- объединяем имя и фамилию
 FLOOR(AVG(s.quantity * p.price)) as average_income -- обрезаем среднее значение выручки
 FROM sales s
-INNER JOIN products p ON -- присоединяем таблицу
+INNER JOIN products p -- присоединяем таблицу
 USING(product_id)
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
@@ -41,7 +41,7 @@ SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS seller, -- объединя
 to_char(s.sale_date, 'Day') as day_of_week, -- преобразуем дату продажи в день недели
 floor(sum(s.quantity * p.price)) as income -- вычисляем доход
 FROM sales s
-INNER JOIN products p ON -- присоединяем таблицу
+INNER JOIN products p -- присоединяем таблицу
 USING(product_id)
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
@@ -69,7 +69,7 @@ SELECT to_char(s.sale_date, 'YYYY-MM') AS selling_month, -- преобразуе
 COUNT(distinct(s.customer_id)) AS total_customers, -- считаем уникальных покупателей
 SUM(s.quantity * p.price) AS income -- суммируем выручку
 FROM sales s
-INNER JOIN products p ON -- присоединяем таблицу
+INNER JOIN products p -- присоединяем таблицу
 USING(product_id)
 INNER JOIN customers c -- присоединяем таблицу
 USING (customer_id)
