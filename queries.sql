@@ -12,8 +12,8 @@ SELECT concat(emp.first_name, ' ', emp.last_name) AS seller, -- объединя
 COUNT(sales_id) AS operations, -- считаем количество продаж
 FLOOR(SUM(s.quantity * p.price)) AS income -- обрезаем сумму выручки
 FROM sales s
-INNER JOIN products p ON -- присоединяем таблицу
-s.product_id = p.product_id
+INNER JOIN products p -- присоединяем таблицу
+USING(product_id)
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name -- выполняем группировку
@@ -25,7 +25,7 @@ SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS seller, -- объединя
 FLOOR(AVG(s.quantity * p.price)) as average_income -- обрезаем среднее значение выручки
 FROM sales s
 INNER JOIN products p ON -- присоединяем таблицу
-s.product_id = p.product_id
+USING(product_id)
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name -- выполняем группировку
@@ -42,7 +42,7 @@ to_char(s.sale_date, 'Day') as day_of_week, -- преобразуем дату �
 floor(sum(s.quantity * p.price)) as income -- вычисляем доход
 FROM sales s
 INNER JOIN products p ON -- присоединяем таблицу
-s.product_id = p.product_id
+USING(product_id)
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name, to_char(s.sale_date, 'Day'), extract(isodow from s.sale_date)
@@ -70,7 +70,7 @@ COUNT(distinct(s.customer_id)) AS total_customers, -- считаем уника�
 SUM(s.quantity * p.price) AS income -- суммируем выручку
 FROM sales s
 INNER JOIN products p ON -- присоединяем таблицу
-s.product_id = p.product_id
+USING(product_id)
 INNER JOIN customers c -- присоединяем таблицу
 USING (customer_id)
 GROUP BY to_char(s.sale_date, 'YYYY-MM')
