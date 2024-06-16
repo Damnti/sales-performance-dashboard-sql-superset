@@ -48,5 +48,20 @@ s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name, to_char(s.sale_date, 'Day'), extract(isodow from s.sale_date)
 ORDER BY extract(isodow from s.sale_date); -- выполняем группировку
 
+-- Проект Продажи (6)
+
+SELECT 
+	CASE WHEN age BETWEEN 16 and 25 THEN '16-25'
+		 WHEN age BETWEEN 26 and 40 THEN '26-40'
+	     WHEN age >= 41 THEN '40+'
+	     ELSE 'out of category'
+	END AS age_category,
+COUNT(customer_id) AS count
+FROM customers
+GROUP BY 1
+ORDER BY 1;
+
+
+
 
 
