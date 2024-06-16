@@ -50,6 +50,8 @@ ORDER BY extract(isodow from s.sale_date); -- выполняем группир�
 
 -- Проект Продажи (6)
 
+-- age_groups
+
 SELECT 
 	CASE WHEN age BETWEEN 16 and 25 THEN '16-25'
 		 WHEN age BETWEEN 26 and 40 THEN '26-40'
@@ -59,6 +61,19 @@ SELECT
 COUNT(customer_id) AS count
 FROM customers
 GROUP BY 1
+ORDER BY 1;
+
+-- customers_by_month
+
+SELECT to_char(s.sale_date, 'YYYY-MM') AS selling_month, -- преобразуем формат даты
+COUNT(distinct(s.customer_id)) AS total_customers, -- считаем уникальных покупателей
+SUM(s.quantity * p.price) AS income -- суммируем выручку
+FROM sales s
+INNER JOIN products p ON -- присоединяем таблицу
+s.product_id = p.product_id
+INNER JOIN customers c -- присоединяем таблицу
+USING (customer_id)
+GROUP BY to_char(s.sale_date, 'YYYY-MM')
 ORDER BY 1;
 
 
