@@ -76,6 +76,31 @@ USING (customer_id)
 GROUP BY to_char(s.sale_date, 'YYYY-MM')
 ORDER BY 1;
 
+-- special_offer
+
+WITH tab AS (
+SELECT c.customer_id,
+concat(c.first_name, ' ', c.last_name) AS customer,
+s.sale_date,
+concat(emp.first_name, ' ', emp.last_name) AS seller,
+row_number() OVER (PARTITION BY concat(c.first_name, ' ', c.last_name) ORDER BY s.sale_date) AS rn
+FROM sales s
+INNER JOIN products p -- присоединяем таблицу
+USING(product_id)
+INNER JOIN customers c -- присоединяем таблицу
+USING(customer_id)
+INNER JOIN employees emp ON -- присоединяем таблицу
+s.sales_person_id = emp.employee_id
+where p.price = 0
+)
+
+SELECT customer,
+sale_date,
+seller
+FROM tab 
+WHERE rn = 1
+order BY customer_id;
+
 
 
 
