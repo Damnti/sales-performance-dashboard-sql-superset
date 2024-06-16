@@ -67,7 +67,7 @@ ORDER BY 1;
 
 SELECT to_char(s.sale_date, 'YYYY-MM') AS selling_month, -- преобразуем формат даты
 COUNT(distinct(s.customer_id)) AS total_customers, -- считаем уникальных покупателей
-SUM(s.quantity * p.price) AS income -- суммируем выручку
+FLOOR(SUM(s.quantity * p.price)) AS income -- суммируем выручку
 FROM sales s
 INNER JOIN products p -- присоединяем таблицу
 USING(product_id)
