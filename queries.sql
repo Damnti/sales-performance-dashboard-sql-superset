@@ -16,7 +16,7 @@ INNER JOIN products p ON -- присоединяем таблицу
 s.product_id = p.product_id
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
-GROUP BY s.sales_person_id, emp.first_name, emp.last_name -- выполняем группировку
+GROUP BY emp.first_name, emp.last_name -- выполняем группировку
 ORDER BY 3 DESC; -- сортируем по третьему столбцу в порядке убывания
 
 -- lowest_average_income
@@ -28,7 +28,7 @@ INNER JOIN products p ON -- присоединяем таблицу
 s.product_id = p.product_id
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
-GROUP BY s.sales_person_id, emp.first_name, emp.last_name -- выполняем группировку
+GROUP BY emp.first_name, emp.last_name -- выполняем группировку
 HAVING AVG(s.quantity * p.price) < (select AVG(s.quantity * p.price) 
 				    FROM sales s
 				    INNER JOIN products p ON
@@ -36,6 +36,17 @@ HAVING AVG(s.quantity * p.price) < (select AVG(s.quantity * p.price)
 ORDER BY 2; -- сортируем по третьему столбцу в порядке возрастания
 
 -- day_of_the_week_income
+
+SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS seller, -- объединяем имя и фамилию
+to_char(s.sale_date, 'Day') as day_of_week, -- преобразуем дату продажи в день недели
+floor(sum(s.quantity * p.price)) as income -- вычисляем доход
+FROM sales s
+INNER JOIN products p ON -- присоединяем таблицу
+s.product_id = p.product_id
+INNER JOIN employees emp ON -- присоединяем таблицу
+s.sales_person_id = emp.employee_id
+GROUP BY emp.first_name, emp.last_name, to_char(s.sale_date, 'Day'), extract(isodow from s.sale_date)
+ORDER BY extract(isodow from s.sale_date); -- выполняем группировку
 
 
 
