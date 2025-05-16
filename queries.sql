@@ -38,7 +38,7 @@ ORDER BY 2; -- сортируем по третьему столбцу в пор
 -- day_of_the_week_income
 
 SELECT CONCAT(emp.first_name, ' ', emp.last_name) AS seller, -- объединяем имя и фамилию
-to_char(s.sale_date, 'Day') as day_of_week, -- преобразуем дату продажи в день недели
+trim(to_char(s.sale_date, 'Day')) as day_of_week, -- преобразуем дату продажи в день недели
 floor(sum(s.quantity * p.price)) as income -- вычисляем доход
 FROM sales s
 INNER JOIN products p -- присоединяем таблицу
