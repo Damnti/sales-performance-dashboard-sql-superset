@@ -17,8 +17,8 @@ USING(product_id)
 INNER JOIN employees emp ON -- присоединяем таблицу
 s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name -- выполняем группировку
-ORDER BY 3 DESC
-limit 10; -- сортируем по третьему столбцу в порядке убывания
+ORDER BY 3 DESC -- сортируем по третьему столбцу в порядке убывания
+limit 10; 
 
 -- lowest_average_income
 
