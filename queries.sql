@@ -19,24 +19,26 @@ INNER JOIN products AS p ON s.product_id = p.product_id
 INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name  -- выполняем группировку
 ORDER BY income DESC  -- сортируем по третьему столбцу в порядке убывания
-limit 10;
+LIMIT 10;
 
 -- lowest_average_income
 
 SELECT
     -- объединяем имя и фамилию
-    CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
+    CONCAT(empl.first_name, ' ', empl.last_name) AS seller,
     -- обрезаем среднее значение выручки
-    FLOOR(AVG(s.quantity * p.price)) AS average_income
-FROM sales AS s
-INNER JOIN products AS p USING(product_id)  -- присоединяем таблицу
-INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id  -- присоединяем таблицу
-GROUP BY emp.first_name, emp.last_name  -- выполняем группировку
+    FLOOR(AVG(sl.quantity * pr.price)) AS average_income
+FROM sales AS sl
+INNER JOIN products AS pr ON sl.product_id = pr.product_id
+INNER JOIN employees AS empl ON sl.sales_person_id = 
+empl.employee_id
+GROUP BY empl.first_name, empl.last_name  -- выполняем группировку
 HAVING
-AVG(s.quantity * p.price) < (
-    SELECT AVG(s.quantity * p.price)
-    FROM sales AS s
-    INNER JOIN products AS p ON s.product_id = p.product_id
+    AVG(sl.quantity * pr.price) < (
+        SELECT AVG(sl.quantity * pr.price)
+        FROM sales AS sa
+        INNER JOIN products AS prod ON sa.product_id = 
+	prod.product_id
     )
 ORDER BY average_income;  -- сортируем по третьему столбцу в порядке возрастания
 
@@ -103,8 +105,8 @@ WITH tab AS (
 		ORDER BY s.sale_date
 	) AS rn
 	FROM sales AS s
-	INNER JOIN products AS p USING(product_id)
-	INNER JOIN customers AS c USING(customer_id)
+	INNER JOIN products AS p ON s.product_id = p.product_id
+	INNER JOIN customers AS c ON s.customer_id = p.customer_id
 	INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
         WHERE p.price = 0
 )
@@ -116,8 +118,3 @@ SELECT
 FROM tab
 WHERE rn = 1
 ORDER BY customer_id;
-
-
-
-
-
