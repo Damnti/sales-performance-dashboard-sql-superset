@@ -59,7 +59,7 @@ SELECT
 	     WHEN age >= 41 THEN '40+'
 	     ELSE 'out of category'
 	END AS age_category,
-COUNT(customer_id) AS count
+COUNT(customer_id) AS age_count
 FROM customers
 GROUP BY 1
 ORDER BY 1;
