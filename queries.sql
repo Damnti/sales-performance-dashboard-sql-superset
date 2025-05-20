@@ -11,12 +11,12 @@ SELECT
     -- объединяем имя и фамилию
     CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
     -- считаем количество продаж
-    COUNT(sales_id) AS operations,
+    COUNT(s.sales_id) AS operations,
     -- обрезаем сумму выручки
-    FLOOR(SUM(s.quantity * p.price)) AS income      
+    FLOOR(SUM(s.quantity * p.price)) AS income
 FROM sales AS s
-INNER JOIN products p USING(product_id)
-INNER JOIN employees emp ON s.sales_person_id = emp.employee_id
+INNER JOIN products AS p ON s.product_id = p.product_id
+INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
 GROUP BY emp.first_name, emp.last_name  -- выполняем группировку
 ORDER BY income DESC  -- сортируем по третьему столбцу в порядке убывания
 limit 10;
