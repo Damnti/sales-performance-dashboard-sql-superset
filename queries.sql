@@ -25,20 +25,20 @@ LIMIT 10;
 
 SELECT
     -- объединяем имя и фамилию
-    CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
+    CONCAT(e.first_name, ' ', e.last_name) AS seller,
     -- обрезаем среднее значение выручки
     FLOOR(AVG(s.quantity * p.price)) AS average_income
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
-INNER JOIN employees AS empl ON s.sales_person_id =
-    emp.employee_id
+INNER JOIN employees AS e 
+    ON s.sales_person_id = e.employee_id
 GROUP BY emp.first_name, emp.last_name  -- выполняем группировку
 HAVING
     AVG(s.quantity * p.price) < (
-        SELECT AVG(s.quantity * p.price)
-        FROM sales AS s
-        INNER JOIN products AS prod ON s.product_id =
-	    p.product_id
+        SELECT AVG(sl.quantity * pr.price)
+        FROM sales AS sl
+        INNER JOIN products AS pr 
+	    ON sl.product_id = pr.product_id
     )
 ORDER BY average_income;  -- сортируем по третьему столбцу в порядке возрастания
 
@@ -53,8 +53,8 @@ SELECT
     FLOOR(SUM(s.quantity * p.price)) AS income
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
-INNER JOIN employees AS emp ON s.sales_person_id
-    = emp.employee_id
+INNER JOIN employees AS emp 
+    ON s.sales_person_id = emp.employee_id
 GROUP BY
     emp.first_name,
     emp.last_name,
