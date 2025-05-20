@@ -1,7 +1,6 @@
 -- Проект Продажи (4)
 
-SELECT
-    COUNT(*) AS customers_count  -- считаем количество строк
+SELECT COUNT(*) AS customers_count  -- считаем количество строк
 FROM customers;
 
 -- Проект Продажи (5)
@@ -10,7 +9,7 @@ FROM customers;
 
 SELECT
     CONCAT(emp.first_name, ' ', emp.last_name) AS seller,  -- объединяем имя и фамилию
-    COUNT(sales_id) AS operations,  		       -- считаем количество продаж
+    COUNT(sales_id) AS operations,  		           -- считаем количество продаж
     FLOOR(SUM(s.quantity * p.price)) AS income             -- обрезаем сумму выручки
 FROM sales s
 INNER JOIN products p USING(product_id)  -- присоединяем таблицу
