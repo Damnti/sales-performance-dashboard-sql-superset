@@ -92,18 +92,17 @@ INNER JOIN customers AS c ON s.customer_id = c.customer_id
 GROUP BY selling_month
 ORDER BY selling_month;
 
-
 -- special_offer
 
 WITH tab AS (
     SELECT
         c.customer_id,
-	s.sale_date,
+        s.sale_date,
         CONCAT(c.first_name, ' ', c.last_name) AS customer,
         CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
         ROW_NUMBER() OVER (
-	    PARTITION BY CONCAT(c.first_name, ' ', c.last_name)
-	    ORDER BY s.sale_date
+            PARTITION BY CONCAT(c.first_name, ' ', c.last_name)
+            ORDER BY s.sale_date
         ) AS rn
     FROM sales AS s
     INNER JOIN products AS p ON s.product_id = p.product_id
