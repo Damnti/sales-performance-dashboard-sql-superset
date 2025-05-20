@@ -31,14 +31,14 @@ SELECT
 FROM sales AS sl
 INNER JOIN products AS pr ON sl.product_id = pr.product_id
 INNER JOIN employees AS empl ON sl.sales_person_id = 
-empl.employee_id
+    empl.employee_id
 GROUP BY empl.first_name, empl.last_name  -- выполняем группировку
 HAVING
     AVG(sl.quantity * pr.price) < (
         SELECT AVG(sl.quantity * pr.price)
         FROM sales AS sa
-        INNER JOIN products AS prod ON sa.product_id = 
-	prod.product_id
+        INNER JOIN products AS prod ON sa.product_id =
+	    prod.product_id
     )
 ORDER BY average_income;  -- сортируем по третьему столбцу в порядке возрастания
 
@@ -52,14 +52,15 @@ SELECT
     -- вычисляем доход
     FLOOR(SUM(s.quantity * p.price)) AS income
 FROM sales AS s
-INNER JOIN products AS p USING(product_id)  -- присоединяем таблицу
-INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id  -- присоединяем таблицу
+INNER JOIN products AS p ON s.product_id = p.product_id
+INNER JOIN employees AS emp ON s.sales_person_id
+    = emp.employee_id
 GROUP BY
     emp.first_name,
     emp.last_name,
     LOWER(TRIM(TO_CHAR(s.sale_date, 'Day'))),
-    EXTRACT(ISODOW from s.sale_date)
-ORDER BY EXTRACT(ISODOW from s.sale_date);  -- выполняем группировку
+    EXTRACT(ISODOW FROM s.sale_date)
+ORDER BY EXTRACT(ISODOW FROM s.sale_date);  -- выполняем группировку
 
 -- Проект Продажи (6)
 
@@ -67,7 +68,7 @@ ORDER BY EXTRACT(ISODOW from s.sale_date);  -- выполняем группир
 
 SELECT
     CASE
-        WHEN age BETWEEN 16 AND 25 THEN '16-25'
+	WHEN age BETWEEN 16 AND 25 THEN '16-25'
 	WHEN age BETWEEN 26 AND 40 THEN '26-40'
 	WHEN age >= 41 THEN '40+'
 	ELSE 'out of category'
@@ -83,11 +84,11 @@ SELECT
     -- преобразуем формат даты
     TO_CHAR(s.sale_date, 'YYYY-MM') AS selling_month,
     -- считаем уникальных покупателей
-    COUNT(DISTINCT(s.customer_id)) AS total_customers,
+    COUNT(DISTINCT (s.customer_id)) AS total_customers,
     FLOOR(SUM(s.quantity * p.price)) AS income  -- суммируем выручку
 FROM sales AS s
-INNER JOIN products AS p USING(product_id)  -- присоединяем таблицу
-INNER JOIN customers USING (customer_id)  -- присоединяем таблицу
+INNER JOIN products AS p ON s.product_id = p.product_id
+INNER JOIN customers AS c ON s.customer_id = c.customer_id
 GROUP BY selling_month
 ORDER BY selling_month;
 
@@ -101,14 +102,14 @@ WITH tab AS (
 	CONCAT(c.first_name, ' ', c.last_name) AS customer,
 	CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
 	ROW_NUMBER() OVER (
-		PARTITION BY CONCAT(c.first_name, ' ', c.last_name) 
-		ORDER BY s.sale_date
+	    PARTITION BY CONCAT(c.first_name, ' ', c.last_name)
+	    ORDER BY s.sale_date
 	) AS rn
-	FROM sales AS s
-	INNER JOIN products AS p ON s.product_id = p.product_id
-	INNER JOIN customers AS c ON s.customer_id = p.customer_id
-	INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
-        WHERE p.price = 0
+    FROM sales AS s
+    INNER JOIN products AS p ON s.product_id = p.product_id
+    INNER JOIN customers AS c ON s.customer_id = p.customer_id
+    INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
+    WHERE p.price = 0
 )
 
 SELECT
