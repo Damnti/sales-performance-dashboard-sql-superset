@@ -30,15 +30,15 @@ SELECT
     FLOOR(AVG(s.quantity * p.price)) AS average_income
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
-INNER JOIN employees AS e 
+INNER JOIN employees AS e
     ON s.sales_person_id = e.employee_id
-GROUP BY emp.first_name, emp.last_name  -- выполняем группировку
+GROUP BY e.first_name, e.last_name  -- выполняем группировку
 HAVING
     AVG(s.quantity * p.price) < (
         SELECT AVG(sl.quantity * pr.price)
         FROM sales AS sl
-        INNER JOIN products AS pr 
-	    ON sl.product_id = pr.product_id
+        INNER JOIN products AS pr
+            ON sl.product_id = pr.product_id
     )
 ORDER BY average_income;  -- сортируем по третьему столбцу в порядке возрастания
 
@@ -53,7 +53,7 @@ SELECT
     FLOOR(SUM(s.quantity * p.price)) AS income
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
-INNER JOIN employees AS emp 
+INNER JOIN employees AS emp
     ON s.sales_person_id = emp.employee_id
 GROUP BY
     emp.first_name,
@@ -68,7 +68,7 @@ ORDER BY EXTRACT(ISODOW FROM s.sale_date);  -- выполняем группир
 
 SELECT
     CASE
-	WHEN age BETWEEN 16 AND 25 THEN '16-25'
+        WHEN age BETWEEN 16 AND 25 THEN '16-25'
 	WHEN age BETWEEN 26 AND 40 THEN '26-40'
 	WHEN age >= 41 THEN '40+'
 	ELSE 'out of category'
@@ -84,7 +84,7 @@ SELECT
     -- преобразуем формат даты
     TO_CHAR(s.sale_date, 'YYYY-MM') AS selling_month,
     -- считаем уникальных покупателей
-    COUNT(DISTINCT(s.customer_id)) AS total_customers,
+    COUNT(DISTINCT s.customer_id) AS total_customers,
     FLOOR(SUM(s.quantity * p.price)) AS income  -- суммируем выручку
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
@@ -104,7 +104,7 @@ WITH tab AS (
         ROW_NUMBER() OVER (
 	    PARTITION BY CONCAT(c.first_name, ' ', c.last_name)
 	    ORDER BY s.sale_date
-	) AS rn
+        ) AS rn
     FROM sales AS s
     INNER JOIN products AS p ON s.product_id = p.product_id
     INNER JOIN customers AS c ON s.customer_id = p.customer_id
