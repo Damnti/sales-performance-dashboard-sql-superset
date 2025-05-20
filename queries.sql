@@ -25,20 +25,20 @@ LIMIT 10;
 
 SELECT
     -- объединяем имя и фамилию
-    CONCAT(empl.first_name, ' ', empl.last_name) AS seller,
+    CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
     -- обрезаем среднее значение выручки
-    FLOOR(AVG(sl.quantity * pr.price)) AS average_income
-FROM sales AS sl
-INNER JOIN products AS pr ON sl.product_id = pr.product_id
-INNER JOIN employees AS empl ON sl.sales_person_id = 
-    empl.employee_id
-GROUP BY empl.first_name, empl.last_name  -- выполняем группировку
+    FLOOR(AVG(s.quantity * p.price)) AS average_income
+FROM sales AS s
+INNER JOIN products AS p ON s.product_id = p.product_id
+INNER JOIN employees AS empl ON s.sales_person_id =
+    emp.employee_id
+GROUP BY emp.first_name, emp.last_name  -- выполняем группировку
 HAVING
-    AVG(sl.quantity * pr.price) < (
-        SELECT AVG(sl.quantity * pr.price)
-        FROM sales AS sa
-        INNER JOIN products AS prod ON sa.product_id =
-	    prod.product_id
+    AVG(s.quantity * p.price) < (
+        SELECT AVG(s.quantity * p.price)
+        FROM sales AS s
+        INNER JOIN products AS prod ON s.product_id =
+	    p.product_id
     )
 ORDER BY average_income;  -- сортируем по третьему столбцу в порядке возрастания
 
@@ -84,7 +84,7 @@ SELECT
     -- преобразуем формат даты
     TO_CHAR(s.sale_date, 'YYYY-MM') AS selling_month,
     -- считаем уникальных покупателей
-    COUNT(DISTINCT (s.customer_id)) AS total_customers,
+    COUNT(DISTINCT(s.customer_id)) AS total_customers,
     FLOOR(SUM(s.quantity * p.price)) AS income  -- суммируем выручку
 FROM sales AS s
 INNER JOIN products AS p ON s.product_id = p.product_id
@@ -97,11 +97,11 @@ ORDER BY selling_month;
 
 WITH tab AS (
     SELECT
-	c.customer_id,
+        c.customer_id,
 	s.sale_date,
-	CONCAT(c.first_name, ' ', c.last_name) AS customer,
-	CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
-	ROW_NUMBER() OVER (
+        CONCAT(c.first_name, ' ', c.last_name) AS customer,
+        CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
+        ROW_NUMBER() OVER (
 	    PARTITION BY CONCAT(c.first_name, ' ', c.last_name)
 	    ORDER BY s.sale_date
 	) AS rn
