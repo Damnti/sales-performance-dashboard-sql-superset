@@ -69,9 +69,9 @@ ORDER BY EXTRACT(ISODOW FROM s.sale_date);  -- выполняем группир
 SELECT
     CASE
         WHEN age BETWEEN 16 AND 25 THEN '16-25'
-	WHEN age BETWEEN 26 AND 40 THEN '26-40'
-	WHEN age >= 41 THEN '40+'
-	ELSE 'out of category'
+        WHEN age BETWEEN 26 AND 40 THEN '26-40'
+        WHEN age >= 41 THEN '40+'
+        ELSE 'out of category'
     END AS age_category,
     COUNT(customer_id) AS age_count
 FROM customers
