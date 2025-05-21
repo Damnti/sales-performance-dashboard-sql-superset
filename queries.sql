@@ -106,7 +106,7 @@ WITH tab AS (
         ) AS rn
     FROM sales AS s
     INNER JOIN products AS p ON s.product_id = p.product_id
-    INNER JOIN customers AS c ON s.customer_id = p.customer_id
+    INNER JOIN customers AS c ON s.customer_id = c.customer_id
     INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
     WHERE p.price = 0
 )
