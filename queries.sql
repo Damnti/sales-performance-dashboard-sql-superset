@@ -116,6 +116,5 @@ SELECT
     sale_date,
     seller
 FROM tab
-WHERE rn = 1
-    AND price = 0
+WHERE rn = 1 AND price = 0
 ORDER BY customer_id;
