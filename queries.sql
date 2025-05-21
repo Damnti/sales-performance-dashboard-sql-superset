@@ -102,7 +102,7 @@ WITH tab AS (
         CONCAT(c.first_name, ' ', c.last_name) AS customer,
         CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
         ROW_NUMBER() OVER (
-            PARTITION BY CONCAT(c.first_name, ' ', c.last_name)
+            PARTITION BY c.customer_id
             ORDER BY s.sale_date
         ) AS rn
     FROM sales AS s
