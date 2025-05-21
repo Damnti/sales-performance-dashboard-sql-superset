@@ -48,7 +48,7 @@ SELECT
     -- объединяем имя и фамилию
     CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
     -- преобразуем дату продажи в день недели
-    LOWER(TRIM(TO_CHAR(s.sale_date, 'Day'))) AS day_of_week,
+    TRIM(TO_CHAR(s.sale_date, 'day')) AS day_of_week,
     -- вычисляем доход
     FLOOR(SUM(s.quantity * p.price)) AS income
 FROM sales AS s
