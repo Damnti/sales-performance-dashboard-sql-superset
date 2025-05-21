@@ -98,6 +98,7 @@ WITH tab AS (
     SELECT
         c.customer_id,
         s.sale_date,
+        p.price,
         CONCAT(c.first_name, ' ', c.last_name) AS customer,
         CONCAT(emp.first_name, ' ', emp.last_name) AS seller,
         ROW_NUMBER() OVER (
@@ -108,7 +109,6 @@ WITH tab AS (
     INNER JOIN products AS p ON s.product_id = p.product_id
     INNER JOIN customers AS c ON s.customer_id = c.customer_id
     INNER JOIN employees AS emp ON s.sales_person_id = emp.employee_id
-    WHERE p.price = 0
 )
 
 SELECT
@@ -117,4 +117,5 @@ SELECT
     seller
 FROM tab
 WHERE rn = 1
+    AND price = 0
 ORDER BY customer_id;
