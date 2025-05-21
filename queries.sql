@@ -58,7 +58,7 @@ INNER JOIN employees AS emp
 GROUP BY
     emp.first_name,
     emp.last_name,
-    LOWER(TRIM(TO_CHAR(s.sale_date, 'Day'))),
+    TRIM(TO_CHAR(s.sale_date, 'day')),
     EXTRACT(ISODOW FROM s.sale_date)
 ORDER BY EXTRACT(ISODOW FROM s.sale_date);  -- выполняем группировку
 
